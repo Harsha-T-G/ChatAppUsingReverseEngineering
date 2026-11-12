@@ -35,6 +35,12 @@ public class GlobalExceptionHandler {
 		return build(HttpStatus.BAD_REQUEST, "minichat.request.unreadable", "Request body is missing or is not valid JSON.", "");
 	}
 
+	@ExceptionHandler(org.springframework.web.bind.MissingServletRequestParameterException.class)
+	public ResponseEntity<ApiError> handleMissingParameter(org.springframework.web.bind.MissingServletRequestParameterException ex) {
+		return build(HttpStatus.BAD_REQUEST, "minichat.request.missing_parameter",
+				"Missing query parameter: " + ex.getParameterName() + ".", "");
+	}
+
 	/** Two requests creating the same username, team or channel at once: the database's unique rule stops the second. */
 	@ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
 	public ResponseEntity<ApiError> handleConflict(org.springframework.dao.DataIntegrityViolationException ex) {

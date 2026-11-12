@@ -1,13 +1,17 @@
 package com.harsha.minichat.team;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.harsha.minichat.common.ApiError;
 import com.harsha.minichat.common.ApiException;
 import com.harsha.minichat.common.Ids;
 import com.harsha.minichat.team.dto.CreateTeamRequest;
+import com.harsha.minichat.team.dto.InviteResult;
 import com.harsha.minichat.user.User;
 import com.harsha.minichat.user.UserService;
 
@@ -17,6 +21,8 @@ public class TeamService {
 	/** REA records types, not values, so the code for an "open" team is my own choice. */
 	private static final String DEFAULT_TYPE = "O";
 	private static final String CREATOR_ROLES = "team_user team_admin";
+	private static final String MEMBER_ROLES = "team_user";
+	private static final int MAX_INVITES = 20;
 
 	private final TeamRepository teams;
 	private final TeamMemberRepository members;
@@ -59,6 +65,39 @@ public class TeamService {
 			throw ApiException.forbidden("minichat.team.not_member", "You are not a member of this team.");
 		}
 		return team;
+	}
+
+	/**
+	 * Simplified version of the recorded invite call. The original emails an invitation link; this one
+	 * adds people who already have an account straight to the team and reports an error for the rest.
+	 */
+	@Transactional
+	public List<InviteResult> inviteByEmail(String inviterId, String teamId, List<String> emails) {
+		requireMembership(teamId, inviterId);
+		if (emails == null || emails.isEmpty() || emails.size() > MAX_INVITES) {
+			throw ApiException.badRequest("minichat.team.invite_size", "Send between 1 and " + MAX_INVITES + " email addresses.");
+		}
+		long now = System.currentTimeMillis();
+		List<InviteResult> results = new ArrayList<>();
+		for (String email : emails) {
+			Optional<User> user = userService.findActiveByEmail(email);
+			if (user.isEmpty()) {
+				results.add(new InviteResult(email, new ApiError("minichat.team.invite_no_account",
+						"No account uses this email. Ask them to sign up first.", "", Ids.newId(), 400)));
+				continue;
+			}
+			if (!members.existsByTeamIdAndUserId(teamId, user.get().getId())) {
+				members.save(new TeamMember(Ids.newId(), teamId, user.get().getId(), MEMBER_ROLES, now));
+			}
+			results.add(new InviteResult(user.get().getEmail(), null));
+		}
+		return results;
+	}
+
+	/** Ids of everyone in the team, used to decide who receives live updates. */
+	@Transactional(readOnly = true)
+	public List<String> memberIds(String teamId) {
+		return members.findUserIdsByTeamId(teamId);
 	}
 
 	private static boolean isBlank(String value) {

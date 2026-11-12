@@ -37,6 +37,14 @@ password or message text was captured.
 | Edit message | `PUT /api/v4/posts/{postId}/patch` |
 | Delete message | `DELETE /api/v4/posts/{postId}` |
 
+Built on top of those, also from the recording:
+
+| What it does | Call | Difference from the original |
+|---|---|---|
+| Live updates | WebSocket `/api/v4/websocket` | Same frame shapes; sends `posted`, `post_edited` and `post_deleted` |
+| Add a person to a team | `POST /api/v4/teams/{teamId}/invite/email` | The original emails an invitation; this one adds people who already have an account |
+| List teammates | `GET /api/v4/users?in_team={teamId}` | Only for your own teams, and without email addresses |
+
 ## Run it
 
 You need Java 25 and Docker.
@@ -46,9 +54,20 @@ docker compose up -d        # Postgres on port 5440
 ./mvnw spring-boot:run      # backend on http://localhost:8090
 ```
 
-Swagger UI: <http://localhost:8090/swagger-ui.html>
+- Chat page: <http://localhost:8090/>
+- Swagger UI: <http://localhost:8090/swagger-ui.html>
 
-To try it by hand in Swagger:
+### Two people chatting (good for a demo)
+
+1. Open <http://localhost:8090/> and sign up as the first person.
+2. Create a team with **+ New team**, then a channel with the **+** next to Channels.
+3. Open the same address in a second tab or window and sign up as a second person.
+   Each tab keeps its own login, so two tabs can be two different people.
+4. In the first tab, click the **+** next to People and enter the second person's email.
+5. Reload the second tab. Both people are now in the channel, and messages, edits and
+   deletes show up on the other side without reloading.
+
+### By hand in Swagger
 
 1. Call `POST /api/v4/users` to sign up.
 2. Call `POST /api/v4/users/login` with `login_id` (your email or username) and `password`.
@@ -74,8 +93,13 @@ The script lists the fields this mini version leaves out.
 ```
 
 The tests start the real application with a real Postgres (Testcontainers, so Docker must be running)
-and cover the full flow plus the failure cases: wrong password, duplicate names, invalid input, and a
-second user who must not be able to read, post, edit or delete in someone else's team.
+and cover:
+
+- the full recorded flow, from sign-up to deleting a message;
+- failure cases: wrong password, duplicate names, invalid input;
+- privacy: a person outside a team cannot read, post, edit, delete, invite or list its members;
+- live updates: a teammate receives new, edited and deleted messages; an outsider, an unauthenticated
+  connection and a logged-out token receive nothing.
 
 ## What came from where
 
@@ -85,17 +109,24 @@ second user who must not be able to read, post, edit or delete in someone else's
 | **Inferred from the recording** | Timestamps are epoch milliseconds; `delete_at` means deletes keep the row; `order` lists post ids newest first |
 | **My own design (REA cannot see it)** | Login token in a `Token` response header and `Authorization: Bearer` on later calls; BCrypt password hashing; who is allowed to do what; validation rules; the table design; the type code `"O"` |
 
-Two additions that were not in the recording:
+Additions that were not in the recording:
 
 - `login_id` on the login call. The recording only contains the automatic login right after sign-up,
   which sends the user `id`. People log in with an email or username, so that was added.
 - `page` and `per_page` on the message list. They were recorded on other list calls and are reused.
+- `in_team` on the user list, so it can be limited to your own team.
+- `POST /api/v4/users/logout`. Nobody logged out while REA was watching, so it had to be added.
+- How a WebSocket connection proves who it is. The browser did it with a cookie, which REA does not
+  record. Here the first frame must be
+  `{"action": "authentication_challenge", "seq": 1, "data": {"token": "<login token>"}}`.
+- The names of the live events (`posted`, `post_edited`, `post_deleted`). REA recorded that an `event`
+  field exists and that `data.post` is a string holding the post as JSON, but not the values.
 
 ## Not built
 
-- Live updates over WebSocket (the recording has them; this version is REST only).
-- Inviting or joining: only the person who creates a team is a member of it.
-- Threads, files, pinning, reactions, direct messages, logout.
+- Threads, files, pinning, reactions, direct messages, typing indicators, unread counts on the server.
+- Leaving a team or removing someone from it.
+- Sessions do not expire by themselves; a token works until that person logs out.
 
 ## Code layout
 
@@ -103,5 +134,7 @@ Two additions that were not in the recording:
 |---|---|
 | `user`, `team`, `channel`, `post` | One folder per feature: controller, service, repository, entity, `dto` records |
 | `auth` | `AuthInterceptor` checks the token on every call except sign-up and login |
+| `realtime` | WebSocket handler; sends an event only after the database change has committed |
 | `common` | Id generator and the error handler |
 | `src/main/resources/db/migration` | Flyway SQL that creates the tables |
+| `src/main/resources/static` | The chat page: plain HTML, CSS and JavaScript, no build step |

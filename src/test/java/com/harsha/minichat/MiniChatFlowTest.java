@@ -6,10 +6,15 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.WebSocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -205,6 +210,114 @@ class MiniChatFlowTest {
 		assertThat(list.body.get("order").size()).isEqualTo(1);
 	}
 
+	@Test
+	void invitedTeammateGetsLiveUpdatesAndOutsiderDoesNot() throws Exception {
+		String alice = signUpAndLogin("alice", "alice@example.com");
+		String bob = signUpAndLogin("bob", "bob@example.com");
+		String carol = signUpAndLogin("carol", "carol@example.com");
+		String aliceId = call("GET", "/api/v4/users/me", alice, null).body.get("id").asString();
+
+		String teamId = call("POST", "/api/v4/teams", alice, "{\"name\":\"live-team\",\"display_name\":\"Live\"}")
+				.body.get("id").asString();
+		String channelId = call("POST", "/api/v4/channels", alice,
+				"{\"team_id\":\"" + teamId + "\",\"name\":\"general\",\"display_name\":\"General\"}").body.get("id").asString();
+
+		// Only a member may invite; unknown emails are reported per address, not as a failed call
+		assertThat(call("POST", "/api/v4/teams/" + teamId + "/invite/email", carol, "[\"carol@example.com\"]").status).isEqualTo(403);
+		assertThat(call("GET", "/api/v4/users/me/teams/" + teamId + "/channels", bob, null).status).isEqualTo(403);
+		Reply invite = call("POST", "/api/v4/teams/" + teamId + "/invite/email", alice,
+				"[\"Bob@Example.com\",\"nobody@example.com\"]");
+		assertThat(invite.status).isEqualTo(200);
+		assertThat(invite.body.get(0).get("email").asString()).isEqualTo("bob@example.com");
+		assertThat(invite.body.get(0).get("error").isNull()).isTrue();
+		assertThat(invite.body.get(1).get("error").get("id").asString()).isEqualTo("minichat.team.invite_no_account");
+		assertThat(call("POST", "/api/v4/teams/" + teamId + "/invite/email", alice, "[\"bob@example.com\"]").status).isEqualTo(200);
+		assertThat(call("POST", "/api/v4/teams/" + teamId + "/invite/email", alice, "[]").status).isEqualTo(400);
+
+		// Bob is in; teammates see names but not email addresses
+		assertThat(call("GET", "/api/v4/users/me/teams/" + teamId + "/channels", bob, null).status).isEqualTo(200);
+		Reply members = call("GET", "/api/v4/users?in_team=" + teamId, bob, null);
+		assertThat(members.status).isEqualTo(200);
+		assertThat(strings(members.body, "username")).containsExactly("alice", "bob");
+		assertThat(members.raw).doesNotContain("@example.com");
+		assertThat(call("GET", "/api/v4/users?in_team=" + teamId, carol, null).status).isEqualTo(403);
+		assertThat(call("GET", "/api/v4/users", bob, null).status).isEqualTo(400);
+
+		// Live updates: a connection must prove who it is before it gets anything
+		LiveClient stranger = LiveClient.connect(http, port);
+		stranger.send("{\"action\":\"user_typing\",\"seq\":1,\"data\":{\"channel_id\":\"" + channelId + "\"}}");
+		assertThat(stranger.next().get("status").asString()).isEqualTo("FAIL");
+		LiveClient badToken = LiveClient.connect(http, port);
+		badToken.send("{\"action\":\"authentication_challenge\",\"seq\":1,\"data\":{\"token\":\"not-a-real-token\"}}");
+		assertThat(badToken.next().get("status").asString()).isEqualTo("FAIL");
+
+		LiveClient bobLive = LiveClient.connect(http, port);
+		bobLive.send("{\"action\":\"authentication_challenge\",\"seq\":1,\"data\":{\"token\":\"" + bob + "\"}}");
+		JsonNode bobAuth = bobLive.next();
+		assertThat(bobAuth.get("status").asString()).isEqualTo("OK");
+		assertThat(bobAuth.get("seq_reply").asLong()).isEqualTo(1);
+		LiveClient carolLive = LiveClient.connect(http, port);
+		carolLive.send("{\"action\":\"authentication_challenge\",\"seq\":1,\"data\":{\"token\":\"" + carol + "\"}}");
+		assertThat(carolLive.next().get("status").asString()).isEqualTo("OK");
+
+		// Alice posts, edits and deletes over REST; Bob is told each time
+		String postId = call("POST", "/api/v4/posts", alice,
+				"{\"channel_id\":\"" + channelId + "\",\"message\":\"hello bob\"}").body.get("id").asString();
+		JsonNode posted = bobLive.next();
+		assertThat(posted.get("event").asString()).isEqualTo("posted");
+		assertThat(posted.get("seq").asLong()).isEqualTo(1);
+		assertThat(fieldNames(posted)).containsExactlyInAnyOrder("event", "data", "broadcast", "seq");
+		assertThat(fieldNames(posted.get("data"))).containsExactlyInAnyOrder(
+				"channel_display_name", "channel_name", "channel_type", "post", "sender_name", "set_online", "team_id");
+		assertThat(fieldNames(posted.get("broadcast"))).containsExactlyInAnyOrder(
+				"channel_id", "connection_id", "omit_connection_id", "omit_users", "team_id", "user_id");
+		assertThat(posted.get("data").get("sender_name").asString()).isEqualTo("@alice");
+		assertThat(posted.get("data").get("post").isString()).isTrue();
+		JsonNode postedPost = JSON.readTree(posted.get("data").get("post").asString());
+		assertThat(postedPost.get("id").asString()).isEqualTo(postId);
+		assertThat(postedPost.get("message").asString()).isEqualTo("hello bob");
+
+		call("PUT", "/api/v4/posts/" + postId + "/patch", alice, "{\"message\":\"hello bob!\"}");
+		JsonNode edited = bobLive.next();
+		assertThat(edited.get("event").asString()).isEqualTo("post_edited");
+		assertThat(JSON.readTree(edited.get("data").get("post").asString()).get("message").asString()).isEqualTo("hello bob!");
+
+		call("DELETE", "/api/v4/posts/" + postId, alice, null);
+		JsonNode deleted = bobLive.next();
+		assertThat(deleted.get("event").asString()).isEqualTo("post_deleted");
+		assertThat(deleted.get("seq").asLong()).isEqualTo(3);
+		assertThat(deleted.get("data").get("delete_by").asString()).isEqualTo(aliceId);
+
+		// A failed post tells nobody, and Carol (not in the team) never heard anything
+		assertThat(call("POST", "/api/v4/posts", carol, "{\"channel_id\":\"" + channelId + "\",\"message\":\"let me in\"}").status).isEqualTo(403);
+		assertThat(bobLive.nothingWithin(300)).isTrue();
+		assertThat(carolLive.nothingWithin(50)).isTrue();
+
+		// Logging out ends the token for REST calls and for live updates
+		assertThat(call("POST", "/api/v4/users/logout", bob, null).status).isEqualTo(200);
+		assertThat(call("GET", "/api/v4/users/me", bob, null).status).isEqualTo(401);
+		call("POST", "/api/v4/posts", alice, "{\"channel_id\":\"" + channelId + "\",\"message\":\"after bob left\"}");
+		assertThat(bobLive.nothingWithin(300)).isTrue();
+
+		bobLive.close();
+		carolLive.close();
+	}
+
+	@Test
+	void servesTheWebPage() throws Exception {
+		HttpResponse<String> page = http.send(
+				HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/")).build(),
+				HttpResponse.BodyHandlers.ofString());
+		assertThat(page.statusCode()).isEqualTo(200);
+		assertThat(page.body()).contains("<title>Mini Chat</title>");
+		for (String asset : List.of("/app.js", "/styles.css")) {
+			HttpResponse<String> file = http.send(
+					HttpRequest.newBuilder(URI.create("http://localhost:" + port + asset)).build(),
+					HttpResponse.BodyHandlers.ofString());
+			assertThat(file.statusCode()).as(asset).isEqualTo(200);
+		}
+	}
+
 	private String signUpAndLogin(String username, String email) throws Exception {
 		Reply signUp = call("POST", "/api/v4/users", null,
 				"{\"email\":\"" + email + "\",\"username\":\"" + username + "\",\"password\":\"" + PASSWORD + "\"}");
@@ -241,6 +354,57 @@ class MiniChatFlowTest {
 		return out;
 	}
 
+	private static List<String> strings(JsonNode array, String field) {
+		List<String> out = new ArrayList<>();
+		array.forEach(item -> out.add(item.get(field).asString()));
+		return out;
+	}
+
 	private record Reply(int status, JsonNode body, String raw, String token) {
+	}
+
+	/** Minimal WebSocket client that queues every complete text frame it receives. */
+	private static final class LiveClient implements WebSocket.Listener {
+
+		private final BlockingQueue<String> frames = new LinkedBlockingQueue<>();
+		private final StringBuilder partial = new StringBuilder();
+		private WebSocket socket;
+
+		static LiveClient connect(HttpClient http, int port) throws Exception {
+			LiveClient client = new LiveClient();
+			client.socket = http.newWebSocketBuilder()
+					.buildAsync(URI.create("ws://localhost:" + port + "/api/v4/websocket"), client)
+					.get(5, TimeUnit.SECONDS);
+			return client;
+		}
+
+		void send(String text) throws Exception {
+			socket.sendText(text, true).get(5, TimeUnit.SECONDS);
+		}
+
+		JsonNode next() throws Exception {
+			String frame = frames.poll(5, TimeUnit.SECONDS);
+			assertThat(frame).as("expected a live-update frame within 5 seconds").isNotNull();
+			return JSON.readTree(frame);
+		}
+
+		boolean nothingWithin(long millis) throws Exception {
+			return frames.poll(millis, TimeUnit.MILLISECONDS) == null;
+		}
+
+		void close() {
+			socket.sendClose(WebSocket.NORMAL_CLOSURE, "done");
+		}
+
+		@Override
+		public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
+			partial.append(data);
+			if (last) {
+				frames.add(partial.toString());
+				partial.setLength(0);
+			}
+			webSocket.request(1);
+			return null;
+		}
 	}
 }

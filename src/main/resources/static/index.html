@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Mini Chat</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Sign up / log in -->
+<main id="auth-screen" class="auth" hidden>
+	<div class="auth-card">
+		<h1>Mini Chat</h1>
+		<p class="muted">A chat backend rebuilt from an API recording made by REA.</p>
+
+		<div class="tabs" role="tablist">
+			<button type="button" id="tab-login" role="tab" aria-selected="true" class="tab active">Log in</button>
+			<button type="button" id="tab-signup" role="tab" aria-selected="false" class="tab">Sign up</button>
+		</div>
+
+		<form id="login-form" autocomplete="on">
+			<label for="login-id">Email or username</label>
+			<input id="login-id" name="username" autocomplete="username" required>
+			<label for="login-password">Password</label>
+			<input id="login-password" name="password" type="password" autocomplete="current-password" required>
+			<button type="submit" class="primary">Log in</button>
+		</form>
+
+		<form id="signup-form" autocomplete="on" hidden>
+			<label for="signup-email">Email</label>
+			<input id="signup-email" name="email" type="email" autocomplete="email" required>
+			<label for="signup-username">Username</label>
+			<input id="signup-username" name="username" autocomplete="username" required minlength="3" maxlength="64"
+				pattern="[a-z0-9._\-]+" aria-describedby="signup-username-hint">
+			<p id="signup-username-hint" class="hint">Lowercase letters, digits, dot, dash or underscore.</p>
+			<label for="signup-password">Password</label>
+			<input id="signup-password" name="password" type="password" autocomplete="new-password" required minlength="8"
+				aria-describedby="signup-password-hint">
+			<p id="signup-password-hint" class="hint">At least 8 characters.</p>
+			<button type="submit" class="primary">Create account</button>
+		</form>
+
+		<p id="auth-error" class="error" role="alert" hidden></p>
+	</div>
+</main>
+
+<!-- Chat -->
+<div id="chat-screen" class="chat" hidden>
+	<aside class="sidebar" aria-label="Teams and channels">
+		<div class="sidebar-top">
+			<label for="team-select" class="sidebar-label">Team</label>
+			<select id="team-select"></select>
+			<button type="button" id="new-team-button" class="link">+ New team</button>
+		</div>
+
+		<div class="sidebar-section">
+			<div class="sidebar-heading">
+				<span class="sidebar-label">Channels</span>
+				<button type="button" id="new-channel-button" class="icon" aria-label="New channel" title="New channel">+</button>
+			</div>
+			<ul id="channel-list" class="channel-list"></ul>
+		</div>
+
+		<div class="sidebar-section">
+			<div class="sidebar-heading">
+				<span class="sidebar-label">People</span>
+				<button type="button" id="invite-button" class="icon" aria-label="Add a person" title="Add a person">+</button>
+			</div>
+			<ul id="member-list" class="member-list"></ul>
+		</div>
+
+		<div class="sidebar-bottom">
+			<span id="me-name" class="me-name"></span>
+			<button type="button" id="logout-button" class="link">Log out</button>
+		</div>
+	</aside>
+
+	<section class="main" aria-label="Messages">
+		<header class="channel-header">
+			<h2 id="channel-title">Pick a channel</h2>
+			<span id="live-status" class="live-status" aria-live="polite">Connecting…</span>
+		</header>
+
+		<div id="empty-state" class="empty" hidden></div>
+		<ol id="message-list" class="message-list" aria-live="polite"></ol>
+
+		<p id="chat-error" class="error banner" role="alert" hidden></p>
+
+		<form id="composer" class="composer" hidden>
+			<label for="composer-input" class="visually-hidden">Message</label>
+			<textarea id="composer-input" rows="1" maxlength="16000" placeholder="Write a message. Enter sends, Shift+Enter adds a line."></textarea>
+			<button type="submit" class="primary">Send</button>
+		</form>
+	</section>
+</div>
+
+<!-- One small dialog reused for "new team", "new channel" and "add a person" -->
+<dialog id="dialog">
+	<form id="dialog-form" method="dialog">
+		<h3 id="dialog-title"></h3>
+		<p id="dialog-help" class="muted"></p>
+		<label id="dialog-label" for="dialog-input"></label>
+		<input id="dialog-input" required>
+		<p id="dialog-error" class="error" role="alert" hidden></p>
+		<div class="dialog-actions">
+			<button type="button" id="dialog-cancel">Cancel</button>
+			<button type="submit" id="dialog-submit" class="primary"></button>
+		</div>
+	</form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -22,7 +22,7 @@ import com.harsha.minichat.post.dto.CreatePostRequest;
 import com.harsha.minichat.post.dto.PatchPostRequest;
 import com.harsha.minichat.post.dto.PostListResponse;
 import com.harsha.minichat.post.dto.PostResponse;
-import com.harsha.minichat.post.dto.StatusResponse;
+import com.harsha.minichat.common.StatusResponse;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;

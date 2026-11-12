@@ -1,8 +1,10 @@
 package com.harsha.minichat.user;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,10 +58,31 @@ public class UserService {
 		return new LoginResult(user, session.getToken());
 	}
 
+	/** Forgets the session so the token stops working. */
+	@Transactional
+	public void logout(String token) {
+		sessions.deleteById(token);
+	}
+
 	@Transactional(readOnly = true)
 	public User get(String userId) {
 		return users.findById(userId)
 				.orElseThrow(() -> ApiException.notFound("minichat.user.not_found", "Unable to find the user."));
+	}
+
+	/** Members of a team, by username. The caller must already have checked that the asker is in that team. */
+	@Transactional(readOnly = true)
+	public List<User> listTeamMembers(String teamId, int page, int perPage) {
+		int size = perPage <= 0 ? 60 : Math.min(perPage, 200);
+		return users.findMembersOfTeam(teamId, PageRequest.of(Math.max(page, 0), size));
+	}
+
+	@Transactional(readOnly = true)
+	public Optional<User> findActiveByEmail(String email) {
+		if (email == null) {
+			return Optional.empty();
+		}
+		return users.findByEmail(email.trim().toLowerCase(Locale.ROOT)).filter(user -> user.getDeleteAt() == 0);
 	}
 
 	private Optional<User> findForLogin(LoginRequest request) {

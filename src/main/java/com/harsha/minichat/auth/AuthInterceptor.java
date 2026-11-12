@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AuthInterceptor implements HandlerInterceptor {
 
 	public static final String USER_ID = "minichat.userId";
+	public static final String TOKEN = "minichat.token";
 
 	private static final String BEARER = "Bearer ";
 
@@ -41,6 +42,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 		Session session = sessions.findById(token)
 				.orElseThrow(() -> ApiException.unauthorized("minichat.session.invalid", "Invalid or expired session, please log in again."));
 		request.setAttribute(USER_ID, session.getUserId());
+		request.setAttribute(TOKEN, session.getToken());
 		return true;
 	}
 

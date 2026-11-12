@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.harsha.minichat.auth.AuthInterceptor;
+import com.harsha.minichat.common.StatusResponse;
+import com.harsha.minichat.realtime.RealtimeHandler;
 import com.harsha.minichat.user.dto.CreateUserRequest;
 import com.harsha.minichat.user.dto.LoginRequest;
 import com.harsha.minichat.user.dto.UserResponse;
@@ -26,9 +28,11 @@ public class UserController {
 	public static final String TOKEN_HEADER = "Token";
 
 	private final UserService userService;
+	private final RealtimeHandler realtimeHandler;
 
-	public UserController(UserService userService) {
+	public UserController(UserService userService, RealtimeHandler realtimeHandler) {
 		this.userService = userService;
+		this.realtimeHandler = realtimeHandler;
 	}
 
 	/** Recorded: POST /api/v4/users -> 201. */
@@ -47,6 +51,14 @@ public class UserController {
 		return ResponseEntity.ok()
 				.header(TOKEN_HEADER, result.token())
 				.body(UserResponse.from(result.user()));
+	}
+
+	/** Not in the recording (the person never logged out while REA was watching). Added so a token can be ended. */
+	@PostMapping("/logout")
+	public StatusResponse logout(@Parameter(hidden = true) @RequestAttribute(AuthInterceptor.TOKEN) String token) {
+		userService.logout(token);
+		realtimeHandler.closeForToken(token);
+		return StatusResponse.ok();
 	}
 
 	/** Recorded: GET /api/v4/users/me -> 200. */
