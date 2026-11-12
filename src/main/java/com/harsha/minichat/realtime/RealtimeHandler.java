@@ -19,7 +19,7 @@ import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorato
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.harsha.minichat.auth.Session;
-import com.harsha.minichat.auth.SessionRepository;
+import com.harsha.minichat.auth.SessionService;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
@@ -42,10 +42,10 @@ public class RealtimeHandler extends TextWebSocketHandler {
 	private static final int SEND_BUFFER_LIMIT_BYTES = 256 * 1024;
 
 	private final Map<String, Connection> connections = new ConcurrentHashMap<>();
-	private final SessionRepository sessions;
+	private final SessionService sessions;
 	private final JsonMapper json;
 
-	public RealtimeHandler(SessionRepository sessions, JsonMapper json) {
+	public RealtimeHandler(SessionService sessions, JsonMapper json) {
 		this.sessions = sessions;
 		this.json = json;
 	}
@@ -75,7 +75,7 @@ public class RealtimeHandler extends TextWebSocketHandler {
 
 		if (AUTH_ACTION.equals(action)) {
 			String token = frame.path("data").path("token").asString("");
-			Optional<Session> found = token.isEmpty() ? Optional.empty() : sessions.findById(token);
+			Optional<Session> found = sessions.findValid(token);
 			if (found.isEmpty()) {
 				reject(connection, seq, "Invalid or expired session, please log in again.");
 				return;

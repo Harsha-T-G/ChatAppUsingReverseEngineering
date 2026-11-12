@@ -1,0 +1,1515 @@
+{
+  "evidence_id": "ev_79d802de252c870e24553cadc7171382736194a980a0c4b1609591381f987d82",
+  "requests": 248,
+  "dropped_events": 0,
+  "calls": {
+    "DELETE /api/v4/posts/{id}": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "status"
+      ]
+    },
+    "DELETE /api/v4/users/me/channels/{id}/drafts": {
+      "times_seen": 8,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "status"
+      ]
+    },
+    "GET /api/v4/agents": {
+      "times_seen": 4,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": []
+    },
+    "GET /api/v4/agents/status": {
+      "times_seen": 4,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "available",
+        "reason"
+      ]
+    },
+    "GET /api/v4/analytics/old": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "name",
+        "team_id"
+      ],
+      "request": [],
+      "response": [
+        "name",
+        "value"
+      ]
+    },
+    "GET /api/v4/channels/{id}": {
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "autotranslation",
+        "banner_info",
+        "create_at",
+        "creator_id",
+        "default_category_name",
+        "delete_at",
+        "disable_join_leave_messages",
+        "discoverable",
+        "display_name",
+        "extra_update_at",
+        "group_constrained",
+        "header",
+        "id",
+        "last_post_at",
+        "last_root_post_at",
+        "managed_category_name",
+        "name",
+        "policy_auto_add",
+        "policy_enforced",
+        "policy_id",
+        "policy_is_active",
+        "props",
+        "purpose",
+        "scheme_id",
+        "shared",
+        "team_id",
+        "total_msg_count",
+        "total_msg_count_root",
+        "type",
+        "update_at"
+      ]
+    },
+    "GET /api/v4/channels/{id}/members/me": {
+      "times_seen": 4,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "autotranslation_disabled",
+        "channel_id",
+        "explicit_roles",
+        "last_update_at",
+        "last_viewed_at",
+        "mention_count",
+        "mention_count_root",
+        "msg_count",
+        "msg_count_root",
+        "notify_props",
+        "roles",
+        "scheme_admin",
+        "scheme_guest",
+        "scheme_user",
+        "urgent_mention_count",
+        "user_id"
+      ]
+    },
+    "GET /api/v4/channels/{id}/posts": {
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "collapsedThreads",
+        "collapsedThreadsExtended",
+        "since",
+        "skipFetchThreads"
+      ],
+      "request": [],
+      "response": [
+        "first_inaccessible_post_time",
+        "next_post_id",
+        "order",
+        "posts",
+        "prev_post_id"
+      ]
+    },
+    "GET /api/v4/channels/{id}/stats": {
+      "times_seen": 5,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "exclude_files_count"
+      ],
+      "request": [],
+      "response": [
+        "channel_id",
+        "files_count",
+        "guest_count",
+        "member_count",
+        "pinnedpost_count"
+      ]
+    },
+    "GET /api/v4/config/client": {
+      "times_seen": 3,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "format"
+      ],
+      "request": [],
+      "response": [
+        "AboutLink",
+        "AllowBannerDismissal",
+        "AllowCustomThemes",
+        "AllowDownloadLogs",
+        "AllowPersistentNotifications",
+        "AllowPersistentNotificationsForGuests",
+        "AllowSyncedDrafts",
+        "AllowedThemes",
+        "AndroidAppDownloadLink",
+        "AndroidLatestVersion",
+        "AndroidMinVersion",
+        "AppDownloadLink",
+        "AppsPluginEnabled",
+        "AsymmetricSigningPublicKey",
+        "AuditLoggingActive",
+        "AvailableLocales",
+        "BannerColor",
+        "BannerText",
+        "BannerTextColor",
+        "BuildDate",
+        "BuildEnterpriseReady",
+        "BuildHash",
+        "BuildHashEnterprise",
+        "BuildNumber",
+        "BurnOnReadDurationSeconds",
+        "BurnOnReadMaximumTimeToLiveSeconds",
+        "CWSMock",
+        "CWSURL",
+        "CollapsedThreads",
+        "CustomBrandText",
+        "CustomDescriptionText",
+        "CustomUrlSchemes",
+        "DataRetentionEnableFileDeletion",
+        "DataRetentionEnableMessageDeletion",
+        "DataRetentionFileRetentionHours",
+        "DataRetentionMessageRetentionHours",
+        "DefaultClientLocale",
+        "DefaultTheme",
+        "DelayChannelAutocomplete",
+        "DeleteAccountLink",
+        "DiagnosticId",
+        "DiagnosticsEnabled",
+        "DisableAppBar",
+        "DisableRefetchingOnBrowserFocus",
+        "DisableWakeUpReconnectHandler",
+        "EmailNotificationContentsType",
+        "EnableAccessControlAuditLogging",
+        "EnableAskCommunityLink",
+        "EnableAttributeBasedAccessControl",
+        "EnableBanner",
+        "EnableBotAccountCreation",
+        "EnableBurnOnRead",
+        "EnableChannelCategorySorting",
+        "EnableChannelPolicyIndicators",
+        "EnableChannelViewedMessages",
+        "EnableClientMetrics",
+        "EnableClientPerformanceDebugging",
+        "EnableCluster",
+        "EnableCommands",
+        "EnableCompliance",
+        "EnableComplianceExport",
+        "EnableConfirmNotificationsToChannel",
+        "EnableCrossTeamSearch",
+        "EnableCustomBrand",
+        "EnableCustomEmoji",
+        "EnableCustomGroups",
+        "EnableCustomUserStatuses",
+        "EnableDesktopLandingPage",
+        "EnableDeveloper",
+        "EnableDiagnostics",
+        "EnableEmailBatching",
+        "EnableEmailInvitations",
+        "EnableEmojiPicker",
+        "EnableFile",
+        "EnableFileAttachments",
+        "EnableGifPicker",
+        "EnableGuestAccounts",
+        "EnableGuestMagicLink",
+        "EnableIncomingWebhooks",
+        "EnableInlineLatex",
+        "EnableJoinLeaveMessageByDefault",
+        "EnableLastActiveTime",
+        "EnableLatex",
+        "EnableLdap",
+        "EnableLinkPreviews",
+        "EnableMarketplace",
+        "EnableMetrics",
+        "EnableMobileFileDownload",
+        "EnableMobileFileUpload",
+        "EnableMultifactorAuthentication",
+        "EnableOAuthServiceProvider",
+        "EnableOnboardingFlow",
+        "EnableOpenServer",
+        "EnableOutgoingOAuthConnections",
+        "EnableOutgoingWebhooks",
+        "EnablePermalinkPreviews",
+        "EnablePostIconOverride",
+        "EnablePostUsernameOverride",
+        "EnablePreviewModeBanner",
+        "EnablePublicLink",
+        "EnableSVGs",
+        "EnableSaml",
+        "EnableSignInWithEmail",
+        "EnableSignInWithUsername",
+        "EnableSignUpWithEmail",
+        "EnableSignUpWithGoogle",
+        "EnableSignUpWithOffice365",
+        "EnableSignUpWithOpenId",
+        "EnableTesting",
+        "EnableThemeSelection",
+        "EnableTutorial",
+        "EnableUserAccessTokens",
+        "EnableUserCreation",
+        "EnableUserDeactivation",
+        "EnableUserManagedAttributes",
+        "EnableUserStatuses",
+        "EnableUserTypingMessages",
+        "EnforceMultifactorAuthentication",
+        "ExperimentalEnableAuthenticationTransfer",
+        "ExperimentalEnableAutomaticReplies",
+        "ExperimentalEnableDefaultChannelLeaveJoinMessages",
+        "ExperimentalEnablePostMetadata",
+        "ExperimentalGroupUnreadChannels",
+        "ExperimentalPrimaryTeam",
+        "ExperimentalSharedChannels",
+        "ExperimentalTimezone",
+        "ExtendSessionLengthWithActivity",
+        "FeatureFlagAggregatePluginMetrics",
+        "FeatureFlagAppsEnabled",
+        "FeatureFlagAttributeValueMasking",
+        "FeatureFlagAutoTranslation",
+        "FeatureFlagBurnOnRead",
+        "FeatureFlagCJKSearch",
+        "FeatureFlagChannelAttributes",
+        "FeatureFlagChannelAttributesRequired",
+        "FeatureFlagChannelPermissionPolicies",
+        "FeatureFlagClassificationMarkings",
+        "FeatureFlagClusterGracefulDrain",
+        "FeatureFlagContentFlagging",
+        "FeatureFlagDiscoverableChannels",
+        "FeatureFlagEnableAIPluginBridge",
+        "FeatureFlagEnableAIRecaps",
+        "FeatureFlagEnableDocs",
+        "FeatureFlagEnableMFIPluginSignaturePublicKey",
+        "FeatureFlagEnableMattermostEntry",
+        "FeatureFlagEnableSharedChannelsDMs",
+        "FeatureFlagEnableShiftEscapeToMarkAllRead",
+        "FeatureFlagEnableSyncAllUsersForRemoteCluster",
+        "FeatureFlagEnforceLogPathRoot",
+        "FeatureFlagExperimentalCrossTeamSearch",
+        "FeatureFlagIntegratedBoards",
+        "FeatureFlagManagedChannelCategories",
+        "FeatureFlagMmBlocksEnabled",
+        "FeatureFlagMobileEphemeralMode",
+        "FeatureFlagMobileSSOCodeExchange",
+        "FeatureFlagMoveThreadsEnabled",
+        "FeatureFlagNormalizeLdapDNs",
+        "FeatureFlagNotificationMonitoring",
+        "FeatureFlagPermissionPolicies",
+        "FeatureFlagPolicySimulation",
+        "FeatureFlagPostAttributes",
+        "FeatureFlagPostDeliveryTracking",
+        "FeatureFlagPropertyFieldGraph",
+        "FeatureFlagPropertyFieldRank",
+        "FeatureFlagRecurringScheduledPosts",
+        "FeatureFlagResourceAttributesInPolicies",
+        "FeatureFlagSessionAttributes",
+        "FeatureFlagTeamMembershipAccessControl",
+        "FeatureFlagTestBoolFeature",
+        "FeatureFlagTestFeature",
+        "FeatureFlagWysiwygEditor",
+        "FileLevel",
+        "ForgotPasswordLink",
+        "GiphySdkKey",
+        "GoogleDeveloperKey",
+        "GuestAccountsEnforceMultifactorAuthentication",
+        "HasImageProxy",
+        "HelpLink",
+        "HideGuestTags",
+        "InstallationDate",
+        "IosAppDownloadLink",
+        "IosLatestVersion",
+        "IosMinVersion",
+        "IsDefaultMarketplace",
+        "IsFipsEnabled",
+        "LdapFirstNameAttributeSet",
+        "LdapLastNameAttributeSet",
+        "LdapLoginFieldName",
+        "LdapNicknameAttributeSet",
+        "LdapPictureAttributeSet",
+        "LdapPositionAttributeSet",
+        "LockProfileFieldsForEmailUsers",
+        "LockTeammateNameDisplay",
+        "ManagedResourcePaths",
+        "MaxFileSize",
+        "MaxMarkdownNodes",
+        "MaxNotificationsPerChannel",
+        "MaxPostSize",
+        "MaximumPersonalAccessTokenLifetimeDays",
+        "MinimumHashtagLength",
+        "MobileExternalBrowser",
+        "NoAccounts",
+        "OpenIdButtonColor",
+        "OpenIdButtonText",
+        "PasswordEnableForgotLink",
+        "PasswordMinimumLength",
+        "PasswordRequireLowercase",
+        "PasswordRequireNumber",
+        "PasswordRequireSymbol",
+        "PasswordRequireUppercase",
+        "PersistentNotificationIntervalMinutes",
+        "PersistentNotificationMaxCount",
+        "PersistentNotificationMaxRecipients",
+        "PluginsEnabled",
+        "PostEditTimeLimit",
+        "PostPriority",
+        "PrivacyPolicyLink",
+        "ReportAProblemLink",
+        "ReportAProblemMail",
+        "ReportAProblemType",
+        "RequireEmailVerification",
+        "RestrictDirectMessage",
+        "RunJobs",
+        "SQLDriverName",
+        "SamlFirstNameAttributeSet",
+        "SamlLastNameAttributeSet",
+        "SamlLoginButtonText",
+        "SamlNicknameAttributeSet",
+        "SamlPositionAttributeSet",
+        "SchemaVersion",
+        "SendEmailNotifications",
+        "SendPushNotifications",
+        "ServiceEnvironment",
+        "ShowEmailAddress",
+        "ShowFullName",
+        "SiteName",
+        "SiteURL",
+        "SupportEmail",
+        "TeammateNameDisplay",
+        "TelemetryId",
+        "TermsOfServiceLink",
+        "TimeBetweenUserTypingUpdatesMilliseconds",
+        "UniqueEmojiReactionLimitPerPost",
+        "UpgradedFromTE",
+        "UseAnonymousURLs",
+        "UsersStatusAndProfileFetchingPollIntervalMilliseconds",
+        "Version",
+        "WebsocketPort",
+        "WebsocketSecurePort",
+        "WebsocketURL",
+        "WranglerAllowedEmailDomain",
+        "WranglerMoveThreadFromDirectMessageChannelEnable",
+        "WranglerMoveThreadFromGroupMessageChannelEnable",
+        "WranglerMoveThreadFromPrivateChannelEnable",
+        "WranglerMoveThreadMaxCount",
+        "WranglerMoveThreadToAnotherTeamEnable",
+        "WranglerPermittedWranglerRoles",
+        "YoutubeReferrerPolicy"
+      ]
+    },
+    "GET /api/v4/license/client": {
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "IsLicensed"
+      ]
+    },
+    "GET /api/v4/limits/server": {
+      "times_seen": 4,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "activeUserCount",
+        "lastAccessiblePostTime",
+        "maxUsersHardLimit",
+        "maxUsersLimit",
+        "postHistoryLimit",
+        "singleChannelGuestCount",
+        "singleChannelGuestLimit"
+      ]
+    },
+    "GET /api/v4/plugins/webapp": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "homepage_url",
+        "icon_path",
+        "id",
+        "min_server_version",
+        "name",
+        "props",
+        "release_notes_url",
+        "support_url",
+        "version",
+        "webapp"
+      ]
+    },
+    "GET /api/v4/properties/groups/access_control/system/fields": {
+      "times_seen": 3,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "target_type"
+      ],
+      "request": [],
+      "response": []
+    },
+    "GET /api/v4/properties/groups/access_control/system/values": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": []
+    },
+    "GET /api/v4/properties/groups/access_control/template/fields": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "target_type"
+      ],
+      "request": [],
+      "response": []
+    },
+    "GET /api/v4/system/notices/{id}": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "client",
+        "clientVersion"
+      ],
+      "request": [],
+      "response": []
+    },
+    "GET /api/v4/system/onboarding/complete": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "name",
+        "value"
+      ]
+    },
+    "GET /api/v4/teams": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "exclude_policy_constrained",
+        "for_directory",
+        "include_total_count",
+        "page",
+        "per_page"
+      ],
+      "request": [],
+      "response": [
+        "allow_open_invite",
+        "allowed_domains",
+        "cloud_limits_archived",
+        "company_name",
+        "create_at",
+        "delete_at",
+        "description",
+        "display_name",
+        "email",
+        "group_constrained",
+        "id",
+        "invite_id",
+        "name",
+        "policy_auto_add",
+        "policy_enforced",
+        "policy_id",
+        "policy_is_active",
+        "scheme_id",
+        "type",
+        "update_at"
+      ]
+    },
+    "GET /api/v4/teams/{id}": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "allow_open_invite",
+        "allowed_domains",
+        "cloud_limits_archived",
+        "company_name",
+        "create_at",
+        "delete_at",
+        "description",
+        "display_name",
+        "email",
+        "group_constrained",
+        "id",
+        "invite_id",
+        "name",
+        "policy_auto_add",
+        "policy_enforced",
+        "policy_id",
+        "policy_is_active",
+        "scheme_id",
+        "type",
+        "update_at"
+      ]
+    },
+    "GET /api/v4/trial-license/prev": {
+      "times_seen": 4,
+      "statuses": [
+        403
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "detailed_error",
+        "id",
+        "message",
+        "request_id",
+        "status_code"
+      ]
+    },
+    "GET /api/v4/users": {
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "page",
+        "per_page",
+        "roles"
+      ],
+      "request": [],
+      "response": [
+        "auth_service",
+        "bot_description",
+        "create_at",
+        "delete_at",
+        "disable_welcome_email",
+        "email",
+        "first_name",
+        "id",
+        "is_bot",
+        "last_name",
+        "last_picture_update",
+        "locale",
+        "nickname",
+        "notify_props",
+        "position",
+        "remote_id",
+        "roles",
+        "timezone",
+        "update_at",
+        "username"
+      ]
+    },
+    "GET /api/v4/users/me": {
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "auth_service",
+        "create_at",
+        "delete_at",
+        "disable_welcome_email",
+        "email",
+        "first_name",
+        "id",
+        "last_name",
+        "last_password_update",
+        "locale",
+        "nickname",
+        "notify_props",
+        "position",
+        "remote_id",
+        "roles",
+        "timezone",
+        "update_at",
+        "username"
+      ]
+    },
+    "GET /api/v4/users/me/channels": {
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "autotranslation",
+        "banner_info",
+        "create_at",
+        "creator_id",
+        "default_category_name",
+        "delete_at",
+        "disable_join_leave_messages",
+        "discoverable",
+        "display_name",
+        "extra_update_at",
+        "group_constrained",
+        "header",
+        "id",
+        "last_post_at",
+        "last_root_post_at",
+        "managed_category_name",
+        "name",
+        "policy_auto_add",
+        "policy_enforced",
+        "policy_id",
+        "policy_is_active",
+        "props",
+        "purpose",
+        "scheme_id",
+        "shared",
+        "team_id",
+        "total_msg_count",
+        "total_msg_count_root",
+        "type",
+        "update_at"
+      ]
+    },
+    "GET /api/v4/users/me/preferences": {
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "category",
+        "name",
+        "user_id",
+        "value"
+      ]
+    },
+    "GET /api/v4/users/me/teams": {
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": []
+    },
+    "GET /api/v4/users/me/teams/members": {
+      "times_seen": 3,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "delete_at",
+        "explicit_roles",
+        "roles",
+        "scheme_admin",
+        "scheme_guest",
+        "scheme_user",
+        "team_id",
+        "user_id"
+      ]
+    },
+    "GET /api/v4/users/me/teams/unread": {
+      "times_seen": 4,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "include_collapsed_threads"
+      ],
+      "request": [],
+      "response": [
+        "mention_count",
+        "mention_count_root",
+        "msg_count",
+        "msg_count_root",
+        "team_id",
+        "thread_count",
+        "thread_mention_count",
+        "thread_urgent_mention_count"
+      ]
+    },
+    "GET /api/v4/users/me/teams/{id}/channels": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "include_deleted"
+      ],
+      "request": [],
+      "response": [
+        "autotranslation",
+        "banner_info",
+        "create_at",
+        "creator_id",
+        "default_category_name",
+        "delete_at",
+        "disable_join_leave_messages",
+        "discoverable",
+        "display_name",
+        "extra_update_at",
+        "group_constrained",
+        "header",
+        "id",
+        "last_post_at",
+        "last_root_post_at",
+        "managed_category_name",
+        "name",
+        "policy_auto_add",
+        "policy_enforced",
+        "policy_id",
+        "policy_is_active",
+        "props",
+        "purpose",
+        "scheme_id",
+        "shared",
+        "team_id",
+        "total_msg_count",
+        "total_msg_count_root",
+        "type",
+        "update_at"
+      ]
+    },
+    "GET /api/v4/users/me/teams/{id}/channels/members": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "autotranslation_disabled",
+        "channel_id",
+        "explicit_roles",
+        "last_update_at",
+        "last_viewed_at",
+        "mention_count",
+        "mention_count_root",
+        "msg_count",
+        "msg_count_root",
+        "notify_props",
+        "roles",
+        "scheme_admin",
+        "scheme_guest",
+        "scheme_user",
+        "urgent_mention_count",
+        "user_id"
+      ]
+    },
+    "GET /api/v4/users/me/teams/{id}/drafts": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": []
+    },
+    "GET /api/v4/users/stats": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "total_users_count"
+      ]
+    },
+    "GET /api/v4/users/stats/filtered": {
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "include_bots",
+        "include_deleted"
+      ],
+      "request": [],
+      "response": [
+        "total_users_count"
+      ]
+    },
+    "GET /api/v4/users/username/{username}": {
+      "times_seen": 1,
+      "statuses": [
+        404
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "detailed_error",
+        "id",
+        "message",
+        "request_id",
+        "status_code"
+      ]
+    },
+    "GET /api/v4/users/{id}/channel_members": {
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "page",
+        "per_page"
+      ],
+      "request": [],
+      "response": []
+    },
+    "GET /api/v4/users/{id}/channels/{id}/posts/unread": {
+      "times_seen": 4,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "collapsedThreads",
+        "collapsedThreadsExtended",
+        "limit_after",
+        "limit_before",
+        "skipFetchThreads"
+      ],
+      "request": [],
+      "response": [
+        "first_inaccessible_post_time",
+        "next_post_id",
+        "order",
+        "posts",
+        "prev_post_id"
+      ]
+    },
+    "GET /api/v4/users/{id}/image": {
+      "times_seen": 6,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "_"
+      ],
+      "request": [],
+      "response": []
+    },
+    "GET /api/v4/users/{id}/teams/{id}/channels/categories": {
+      "times_seen": 4,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "categories",
+        "order"
+      ]
+    },
+    "GET /api/v4/users/{id}/teams/{id}/threads": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "after",
+        "before",
+        "deleted",
+        "extended",
+        "per_page",
+        "since",
+        "threadsOnly",
+        "totalsOnly",
+        "unread"
+      ],
+      "request": [],
+      "response": [
+        "threads",
+        "total",
+        "total_unread_mentions",
+        "total_unread_threads",
+        "total_unread_urgent_mentions"
+      ]
+    },
+    "GET /plugins/github/api/v1/connected": {
+      "times_seen": 2,
+      "statuses": [
+        404
+      ],
+      "query": [
+        "reminder"
+      ],
+      "request": [],
+      "response": []
+    },
+    "POST /api/v4/access_control/decisions/actions/search": {
+      "times_seen": 4,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [
+        "actions",
+        "resource"
+      ],
+      "response": [
+        "decisions",
+        "resource",
+        "results"
+      ]
+    },
+    "POST /api/v4/channels": {
+      "times_seen": 2,
+      "statuses": [
+        201
+      ],
+      "query": [],
+      "request": [
+        "create_at",
+        "creator_id",
+        "delete_at",
+        "display_name",
+        "group_constrained",
+        "header",
+        "id",
+        "last_post_at",
+        "last_root_post_at",
+        "name",
+        "purpose",
+        "scheme_id",
+        "team_id",
+        "type",
+        "update_at"
+      ],
+      "response": [
+        "autotranslation",
+        "banner_info",
+        "create_at",
+        "creator_id",
+        "default_category_name",
+        "delete_at",
+        "disable_join_leave_messages",
+        "discoverable",
+        "display_name",
+        "extra_update_at",
+        "group_constrained",
+        "header",
+        "id",
+        "last_post_at",
+        "last_root_post_at",
+        "managed_category_name",
+        "name",
+        "policy_auto_add",
+        "policy_enforced",
+        "policy_id",
+        "policy_is_active",
+        "props",
+        "purpose",
+        "scheme_id",
+        "shared",
+        "team_id",
+        "total_msg_count",
+        "total_msg_count_root",
+        "type",
+        "update_at"
+      ]
+    },
+    "POST /api/v4/channels/members/me/view": {
+      "times_seen": 16,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [
+        "channel_id",
+        "collapsed_threads_supported"
+      ],
+      "response": [
+        "last_viewed_at_times",
+        "status"
+      ]
+    },
+    "POST /api/v4/client_perf": {
+      "times_seen": 7,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": []
+    },
+    "POST /api/v4/posts": {
+      "times_seen": 6,
+      "statuses": [
+        201
+      ],
+      "query": [],
+      "request": [
+        "channel_id",
+        "create_at",
+        "file_ids",
+        "message",
+        "metadata",
+        "pending_post_id",
+        "props",
+        "reply_count",
+        "root_id",
+        "update_at",
+        "user_id"
+      ],
+      "response": [
+        "channel_id",
+        "create_at",
+        "delete_at",
+        "edit_at",
+        "file_ids",
+        "hashtags",
+        "id",
+        "is_pinned",
+        "last_reply_at",
+        "message",
+        "metadata",
+        "original_id",
+        "participants",
+        "pending_post_id",
+        "props",
+        "remote_id",
+        "reply_count",
+        "root_id",
+        "type",
+        "update_at",
+        "user_id"
+      ]
+    },
+    "POST /api/v4/roles/names": {
+      "times_seen": 4,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "built_in",
+        "create_at",
+        "delete_at",
+        "description",
+        "display_name",
+        "id",
+        "name",
+        "permissions",
+        "scheme_id",
+        "scheme_managed",
+        "update_at"
+      ]
+    },
+    "POST /api/v4/system/onboarding/complete": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [
+        "install_plugins",
+        "organization"
+      ],
+      "response": [
+        "status"
+      ]
+    },
+    "POST /api/v4/teams": {
+      "times_seen": 1,
+      "statuses": [
+        201
+      ],
+      "query": [],
+      "request": [
+        "allow_open_invite",
+        "allowed_domains",
+        "company_name",
+        "create_at",
+        "delete_at",
+        "description",
+        "display_name",
+        "email",
+        "group_constrained",
+        "id",
+        "invite_id",
+        "name",
+        "scheme_id",
+        "type",
+        "update_at"
+      ],
+      "response": [
+        "allow_open_invite",
+        "allowed_domains",
+        "cloud_limits_archived",
+        "company_name",
+        "create_at",
+        "delete_at",
+        "description",
+        "display_name",
+        "email",
+        "group_constrained",
+        "id",
+        "invite_id",
+        "name",
+        "policy_auto_add",
+        "policy_enforced",
+        "policy_id",
+        "policy_is_active",
+        "scheme_id",
+        "type",
+        "update_at"
+      ]
+    },
+    "POST /api/v4/teams/{id}/invite/email": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [
+        "graceful"
+      ],
+      "request": [],
+      "response": [
+        "email",
+        "error"
+      ]
+    },
+    "POST /api/v4/users": {
+      "times_seen": 1,
+      "statuses": [
+        201
+      ],
+      "query": [],
+      "request": [
+        "email",
+        "password",
+        "username"
+      ],
+      "response": [
+        "auth_service",
+        "create_at",
+        "delete_at",
+        "disable_welcome_email",
+        "email",
+        "first_name",
+        "id",
+        "last_name",
+        "last_password_update",
+        "locale",
+        "nickname",
+        "notify_props",
+        "position",
+        "remote_id",
+        "roles",
+        "timezone",
+        "update_at",
+        "username"
+      ]
+    },
+    "POST /api/v4/users/login": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [
+        "device_id",
+        "id",
+        "password",
+        "token"
+      ],
+      "response": [
+        "auth_service",
+        "create_at",
+        "delete_at",
+        "disable_welcome_email",
+        "email",
+        "first_name",
+        "id",
+        "last_name",
+        "last_password_update",
+        "locale",
+        "nickname",
+        "notify_props",
+        "position",
+        "remote_id",
+        "roles",
+        "timezone",
+        "update_at",
+        "username"
+      ]
+    },
+    "POST /api/v4/users/search": {
+      "times_seen": 15,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [
+        "term"
+      ],
+      "response": [
+        "auth_service",
+        "bot_description",
+        "create_at",
+        "delete_at",
+        "disable_welcome_email",
+        "email",
+        "first_name",
+        "id",
+        "is_bot",
+        "last_name",
+        "last_picture_update",
+        "locale",
+        "nickname",
+        "notify_props",
+        "position",
+        "remote_id",
+        "roles",
+        "timezone",
+        "update_at",
+        "username"
+      ]
+    },
+    "POST /api/v4/users/status/ids": {
+      "times_seen": 7,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [],
+      "response": [
+        "dnd_end_time",
+        "last_activity_at",
+        "manual",
+        "status",
+        "user_id"
+      ]
+    },
+    "PUT /api/v4/posts/{id}/patch": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [
+        "channelId",
+        "channel_id",
+        "createAt",
+        "create_at",
+        "delete_at",
+        "edit_at",
+        "fileInfos",
+        "file_ids",
+        "hashtags",
+        "id",
+        "is_pinned",
+        "last_reply_at",
+        "message",
+        "metadata",
+        "original_id",
+        "participants",
+        "pending_post_id",
+        "props",
+        "remote_id",
+        "reply_count",
+        "rootId",
+        "root_id",
+        "type",
+        "updateAt",
+        "update_at",
+        "uploadsInProgress",
+        "user_id"
+      ],
+      "response": [
+        "channel_id",
+        "create_at",
+        "delete_at",
+        "edit_at",
+        "file_ids",
+        "hashtags",
+        "id",
+        "is_pinned",
+        "last_reply_at",
+        "message",
+        "metadata",
+        "original_id",
+        "participants",
+        "pending_post_id",
+        "props",
+        "reply_count",
+        "root_id",
+        "type",
+        "update_at",
+        "user_id"
+      ]
+    },
+    "PUT /api/v4/users/me/patch": {
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [
+        "auth_service",
+        "create_at",
+        "delete_at",
+        "disable_welcome_email",
+        "email",
+        "first_name",
+        "id",
+        "last_name",
+        "last_password_update",
+        "locale",
+        "nickname",
+        "notify_props",
+        "position",
+        "remote_id",
+        "roles",
+        "timezone",
+        "update_at",
+        "username"
+      ],
+      "response": [
+        "auth_service",
+        "create_at",
+        "delete_at",
+        "disable_welcome_email",
+        "email",
+        "first_name",
+        "id",
+        "last_name",
+        "last_password_update",
+        "locale",
+        "nickname",
+        "notify_props",
+        "position",
+        "remote_id",
+        "roles",
+        "timezone",
+        "update_at",
+        "username"
+      ]
+    },
+    "PUT /api/v4/users/{id}/preferences": {
+      "times_seen": 12,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [
+        "category",
+        "name",
+        "user_id",
+        "value"
+      ],
+      "response": [
+        "status"
+      ]
+    },
+    "PUT /api/v4/users/{id}/teams/{id}/channels/categories": {
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "query": [],
+      "request": [
+        "channel_ids",
+        "collapsed",
+        "display_name",
+        "id",
+        "muted",
+        "sort_order",
+        "sorting",
+        "team_id",
+        "type",
+        "user_id"
+      ],
+      "response": [
+        "channel_ids",
+        "collapsed",
+        "display_name",
+        "id",
+        "muted",
+        "sort_order",
+        "sorting",
+        "team_id",
+        "type",
+        "user_id"
+      ]
+    }
+  },
+  "websocket_frames": {
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.contains_sensitive_data, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.delete_by, data.post, event, seq": 1,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.contains_sensitive_data, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.plugin_statuses, event, seq": 12,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.channel_display_name, data.channel_name, data.channel_type, data.post, data.sender_name, data.set_online, data.team_id, event, seq": 9,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.channel_id, data.team_id, event, seq": 2,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.channel_times, event, seq": 6,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.config, event, seq": 4,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.connection_id, data.server_hostname, data.server_version, event, seq": 2,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.left_sidebar_enabled, data.review_target_day_type, data.review_target_days, event, seq": 8,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.post, event, seq": 1,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.preferences, event, seq": 12,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.status, data.user_id, event, seq": 1,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.team_id, data.user_id, event, seq": 2,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.updatedCategories, event, seq": 2,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, data.user, event, seq": 2,
+    "received: broadcast, broadcast.channel_id, broadcast.connection_id, broadcast.omit_connection_id, broadcast.omit_users, broadcast.team_id, broadcast.user_id, data, event, seq": 12,
+    "received: data, data.node_id, data.server_time, data.text, data.version, seq_reply, status": 14,
+    "received: seq_reply, status": 16,
+    "sent: action, data, data.channel_id, data.parent_id, seq": 9,
+    "sent: action, data, data.channel_id, seq": 6,
+    "sent: action, data, data.team_id, seq": 1,
+    "sent: action, seq": 14
+  }
+}

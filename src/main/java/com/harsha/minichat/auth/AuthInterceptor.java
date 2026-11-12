@@ -23,9 +23,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 	private static final String BEARER = "Bearer ";
 
-	private final SessionRepository sessions;
+	private final SessionService sessions;
 
-	public AuthInterceptor(SessionRepository sessions) {
+	public AuthInterceptor(SessionService sessions) {
 		this.sessions = sessions;
 	}
 
@@ -39,7 +39,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 			throw ApiException.unauthorized("minichat.session.missing", "Log in first, then send the token as 'Authorization: Bearer <token>'.");
 		}
 		String token = header.substring(BEARER.length()).trim();
-		Session session = sessions.findById(token)
+		Session session = sessions.findValid(token)
 				.orElseThrow(() -> ApiException.unauthorized("minichat.session.invalid", "Invalid or expired session, please log in again."));
 		request.setAttribute(USER_ID, session.getUserId());
 		request.setAttribute(TOKEN, session.getToken());

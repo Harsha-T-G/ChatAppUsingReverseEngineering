@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.harsha.minichat.auth.Session;
-import com.harsha.minichat.auth.SessionRepository;
+import com.harsha.minichat.auth.SessionService;
 import com.harsha.minichat.common.ApiException;
 import com.harsha.minichat.common.Ids;
 import com.harsha.minichat.user.dto.CreateUserRequest;
@@ -22,10 +22,10 @@ public class UserService {
 	private static final String DEFAULT_ROLES = "system_user";
 
 	private final UserRepository users;
-	private final SessionRepository sessions;
+	private final SessionService sessions;
 	private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-	public UserService(UserRepository users, SessionRepository sessions) {
+	public UserService(UserRepository users, SessionService sessions) {
 		this.users = users;
 		this.sessions = sessions;
 	}
@@ -54,14 +54,14 @@ public class UserService {
 			throw ApiException.unauthorized("minichat.user.login_failed", "Enter a valid email or username and password.");
 		}
 		User user = found.get();
-		Session session = sessions.save(new Session(Ids.newId(), user.getId(), System.currentTimeMillis()));
+		Session session = sessions.open(user.getId());
 		return new LoginResult(user, session.getToken());
 	}
 
 	/** Forgets the session so the token stops working. */
 	@Transactional
 	public void logout(String token) {
-		sessions.deleteById(token);
+		sessions.end(token);
 	}
 
 	@Transactional(readOnly = true)

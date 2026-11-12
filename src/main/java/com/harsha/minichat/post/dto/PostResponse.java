@@ -3,6 +3,7 @@ package com.harsha.minichat.post.dto;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.harsha.minichat.post.Post;
 
@@ -27,13 +28,25 @@ public record PostResponse(
 		String hashtags,
 		List<String> fileIds,
 		String pendingPostId,
-		String remoteId,
+		@JsonInclude(JsonInclude.Include.NON_NULL) String remoteId,
 		long replyCount,
 		long lastReplyAt,
 		List<String> participants,
 		Map<String, Object> metadata) {
 
 	public static PostResponse from(Post post) {
+		return build(post, "");
+	}
+
+	/**
+	 * The edit response. In the recording it has every field of a new post except remote_id.
+	 * Found by pointing REA at this backend and comparing with the original recording.
+	 */
+	public static PostResponse edited(Post post) {
+		return build(post, null);
+	}
+
+	private static PostResponse build(Post post, String remoteId) {
 		return new PostResponse(
 				post.getId(),
 				post.getCreateAt(),
@@ -51,7 +64,7 @@ public record PostResponse(
 				"",
 				List.of(),
 				post.getPendingPostId(),
-				"",
+				remoteId,
 				0,
 				0,
 				null,

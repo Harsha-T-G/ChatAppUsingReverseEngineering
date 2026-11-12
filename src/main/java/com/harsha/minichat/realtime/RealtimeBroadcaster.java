@@ -53,6 +53,10 @@ public class RealtimeBroadcaster {
 		broadcast.put("team_id", event.channel().getTeamId());
 		broadcast.put("connection_id", "");
 		broadcast.put("omit_connection_id", "");
+		if (event.type() == PostEvent.Type.DELETED) {
+			// Recorded only on the delete event. REA keeps types, not values; true because the frame carries the deleted text.
+			broadcast.put("contains_sensitive_data", true);
+		}
 
 		handler.broadcast(event.type().eventName(), data, broadcast, event.recipientIds());
 	}

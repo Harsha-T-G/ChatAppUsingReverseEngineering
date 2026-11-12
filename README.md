@@ -86,6 +86,54 @@ This replays the 12 calls and checks each response against what REA recorded. Cu
 all 12 calls return the recorded status, and 146 of the 211 recorded response fields are returned.
 The script lists the fields this mini version leaves out.
 
+## Check the rebuild with REA
+
+The strongest check uses the same tool that made the blueprint: point REA at the rebuilt chat page,
+click through it, and compare that recording with the recording of the original.
+
+```bash
+# 1. backend and a headless Chrome
+./mvnw spring-boot:run
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+  --remote-debugging-port=9333 --user-data-dir=/tmp/minichat-headless about:blank
+
+# 2. open the chat page in a tab and note its id
+curl -s -X PUT "http://127.0.0.1:9333/json/new?http://localhost:8090/"
+
+# 3. let REA record that tab for 75 seconds ...
+npx -y rea-agents@latest inspect-web-page http://127.0.0.1:9333 <TAB_ID> --observation-ms 75000 \
+  --include-json-body-shapes --include-websocket-shapes --json > rebuild-capture.json
+
+# 4. ... while two scripted people use the page (run this in another terminal right away)
+ALICE_TARGET=<TAB_ID> START_DELAY_MS=25000 node scripts/ui-check.mjs
+
+# 5. compare with the original
+python3 scripts/compare_with_original.py rebuild-capture.json
+```
+
+[docs/original-shapes.json](docs/original-shapes.json) is the summary of the original recording that
+step 5 compares against (endpoints, status codes and field names only).
+
+Latest result:
+
+| Check | Result |
+|---|---|
+| Endpoints the rebuilt page calls that exist in the original | 13 of 13 |
+| Same success status as the original | 13 of 13 |
+| Original response fields returned | 141 of 203 |
+| Live-update frame shapes also seen in the original | 4 of 5 |
+
+The two remaining differences are the deliberate additions listed below: `login_id` on login, and the
+token frame that opens a live connection.
+
+The first run of this check found two real mistakes, both fixed since:
+
+- The edit response returned `remote_id`. In the original, a new post has that field but an edited
+  post does not.
+- The "message deleted" live frame was missing `broadcast.contains_sensitive_data`.
+
+Neither was visible in the tests or by using the page; they only showed up when REA compared the two.
+
 ## Tests
 
 ```bash
@@ -126,7 +174,8 @@ Additions that were not in the recording:
 
 - Threads, files, pinning, reactions, direct messages, typing indicators, unread counts on the server.
 - Leaving a team or removing someone from it.
-- Sessions do not expire by themselves; a token works until that person logs out.
+
+Sessions end when the person logs out or after 30 days (`minichat.session.ttl-days`).
 
 ## Code layout
 

@@ -71,7 +71,7 @@ public class PostController {
 			@Parameter(hidden = true) @RequestAttribute(AuthInterceptor.USER_ID) String userId,
 			@PathVariable String postId,
 			@Valid @RequestBody PatchPostRequest request) {
-		return PostResponse.from(postService.edit(userId, postId, request));
+		return PostResponse.edited(postService.edit(userId, postId, request));
 	}
 
 	/** Recorded: DELETE /api/v4/posts/{id} -> 200 with {"status": ...}. */

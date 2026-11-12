@@ -17,7 +17,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.junit.jupiter.Container;
@@ -52,6 +54,9 @@ class MiniChatFlowTest {
 
 	@Value("${local.server.port}")
 	private int port;
+
+	@Autowired
+	private JdbcTemplate jdbc;
 
 	@Test
 	void recordedChatFlowWorksEndToEnd() throws Exception {
@@ -128,6 +133,10 @@ class MiniChatFlowTest {
 		assertThat(edit.body.get("message").asString()).isEqualTo("second (edited)");
 		assertThat(edit.body.get("edit_at").asLong()).isGreaterThan(0);
 		assertThat(edit.body.get("is_pinned").asBoolean()).isFalse();
+		// The recorded edit response has every post field except remote_id
+		Set<String> recordedEditFields = new TreeSet<>(RECORDED_POST_FIELDS);
+		recordedEditFields.remove("remote_id");
+		assertThat(fieldNames(edit.body)).isEqualTo(recordedEditFields);
 
 		// Delete the third message: it disappears from the list but shows up in "since" as deleted
 		Reply delete = call("DELETE", "/api/v4/posts/" + postIds.get(2), token, null);
@@ -287,6 +296,8 @@ class MiniChatFlowTest {
 		assertThat(deleted.get("event").asString()).isEqualTo("post_deleted");
 		assertThat(deleted.get("seq").asLong()).isEqualTo(3);
 		assertThat(deleted.get("data").get("delete_by").asString()).isEqualTo(aliceId);
+		assertThat(fieldNames(deleted.get("broadcast"))).containsExactlyInAnyOrder(
+				"channel_id", "connection_id", "contains_sensitive_data", "omit_connection_id", "omit_users", "team_id", "user_id");
 
 		// A failed post tells nobody, and Carol (not in the team) never heard anything
 		assertThat(call("POST", "/api/v4/posts", carol, "{\"channel_id\":\"" + channelId + "\",\"message\":\"let me in\"}").status).isEqualTo(403);
@@ -301,6 +312,28 @@ class MiniChatFlowTest {
 
 		bobLive.close();
 		carolLive.close();
+	}
+
+	@Test
+	void oldSessionsStopWorking() throws Exception {
+		String token = signUpAndLogin("sleepy", "sleepy@example.com");
+		assertThat(call("GET", "/api/v4/users/me", token, null).status).isEqualTo(200);
+
+		// Pretend the login happened 31 days ago (the limit is 30)
+		long thirtyOneDaysAgo = System.currentTimeMillis() - 31L * 24 * 60 * 60 * 1000;
+		assertThat(jdbc.update("update sessions set create_at = ? where token = ?", thirtyOneDaysAgo, token)).isEqualTo(1);
+
+		LiveClient live = LiveClient.connect(http, port);
+		live.send("{\"action\":\"authentication_challenge\",\"seq\":1,\"data\":{\"token\":\"" + token + "\"}}");
+		assertThat(live.next().get("status").asString()).isEqualTo("FAIL");
+		Reply expired = call("GET", "/api/v4/users/me", token, null);
+		assertThat(expired.status).isEqualTo(401);
+		assertThat(expired.body.get("id").asString()).isEqualTo("minichat.session.invalid");
+		assertThat(jdbc.queryForObject("select count(*) from sessions where token = ?", Integer.class, token)).isZero();
+
+		// Logging in again gives a fresh token that works
+		Reply again = call("POST", "/api/v4/users/login", null, "{\"login_id\":\"sleepy\",\"password\":\"" + PASSWORD + "\"}");
+		assertThat(call("GET", "/api/v4/users/me", again.token, null).status).isEqualTo(200);
 	}
 
 	@Test
