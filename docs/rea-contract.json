@@ -1,0 +1,442 @@
+{
+  "source": "REA inspect-web-page capture of a local chat server",
+  "evidence_id": "ev_79d802de252c870e24553cadc7171382736194a980a0c4b1609591381f987d82",
+  "note": "Field names and types only; REA does not record values, headers or cookies.",
+  "calls": [
+    {
+      "method": "POST",
+      "path": "/api/v4/users",
+      "times_seen": 1,
+      "statuses": [
+        201
+      ],
+      "request_fields": [
+        "email",
+        "password",
+        "username"
+      ],
+      "response_root": "object",
+      "response_fields": [
+        "auth_service",
+        "create_at",
+        "delete_at",
+        "disable_welcome_email",
+        "email",
+        "first_name",
+        "id",
+        "last_name",
+        "last_password_update",
+        "locale",
+        "nickname",
+        "notify_props",
+        "position",
+        "remote_id",
+        "roles",
+        "timezone",
+        "update_at",
+        "username"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v4/users/login",
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "request_fields": [
+        "device_id",
+        "id",
+        "password",
+        "token"
+      ],
+      "response_root": "object",
+      "response_fields": [
+        "auth_service",
+        "create_at",
+        "delete_at",
+        "disable_welcome_email",
+        "email",
+        "first_name",
+        "id",
+        "last_name",
+        "last_password_update",
+        "locale",
+        "nickname",
+        "notify_props",
+        "position",
+        "remote_id",
+        "roles",
+        "timezone",
+        "update_at",
+        "username"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/users/me",
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "request_fields": [],
+      "response_root": "object",
+      "response_fields": [
+        "auth_service",
+        "create_at",
+        "delete_at",
+        "disable_welcome_email",
+        "email",
+        "first_name",
+        "id",
+        "last_name",
+        "last_password_update",
+        "locale",
+        "nickname",
+        "notify_props",
+        "position",
+        "remote_id",
+        "roles",
+        "timezone",
+        "update_at",
+        "username"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v4/teams",
+      "times_seen": 1,
+      "statuses": [
+        201
+      ],
+      "request_fields": [
+        "allow_open_invite",
+        "allowed_domains",
+        "company_name",
+        "create_at",
+        "delete_at",
+        "description",
+        "display_name",
+        "email",
+        "group_constrained",
+        "id",
+        "invite_id",
+        "name",
+        "scheme_id",
+        "type",
+        "update_at"
+      ],
+      "response_root": "object",
+      "response_fields": [
+        "allow_open_invite",
+        "allowed_domains",
+        "cloud_limits_archived",
+        "company_name",
+        "create_at",
+        "delete_at",
+        "description",
+        "display_name",
+        "email",
+        "group_constrained",
+        "id",
+        "invite_id",
+        "name",
+        "policy_auto_add",
+        "policy_enforced",
+        "policy_id",
+        "policy_is_active",
+        "scheme_id",
+        "type",
+        "update_at"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/users/me/teams",
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "request_fields": [],
+      "response_root": "array",
+      "response_fields": []
+    },
+    {
+      "method": "POST",
+      "path": "/api/v4/channels",
+      "times_seen": 2,
+      "statuses": [
+        201
+      ],
+      "request_fields": [
+        "create_at",
+        "creator_id",
+        "delete_at",
+        "display_name",
+        "group_constrained",
+        "header",
+        "id",
+        "last_post_at",
+        "last_root_post_at",
+        "name",
+        "purpose",
+        "scheme_id",
+        "team_id",
+        "type",
+        "update_at"
+      ],
+      "response_root": "object",
+      "response_fields": [
+        "autotranslation",
+        "banner_info",
+        "create_at",
+        "creator_id",
+        "default_category_name",
+        "delete_at",
+        "disable_join_leave_messages",
+        "discoverable",
+        "display_name",
+        "extra_update_at",
+        "group_constrained",
+        "header",
+        "id",
+        "last_post_at",
+        "last_root_post_at",
+        "managed_category_name",
+        "name",
+        "policy_auto_add",
+        "policy_enforced",
+        "policy_id",
+        "policy_is_active",
+        "props",
+        "purpose",
+        "scheme_id",
+        "shared",
+        "team_id",
+        "total_msg_count",
+        "total_msg_count_root",
+        "type",
+        "update_at"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/users/me/teams/{id}/channels",
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "request_fields": [],
+      "response_root": "array",
+      "response_fields": [
+        "autotranslation",
+        "banner_info",
+        "create_at",
+        "creator_id",
+        "default_category_name",
+        "delete_at",
+        "disable_join_leave_messages",
+        "discoverable",
+        "display_name",
+        "extra_update_at",
+        "group_constrained",
+        "header",
+        "id",
+        "last_post_at",
+        "last_root_post_at",
+        "managed_category_name",
+        "name",
+        "policy_auto_add",
+        "policy_enforced",
+        "policy_id",
+        "policy_is_active",
+        "props",
+        "purpose",
+        "scheme_id",
+        "shared",
+        "team_id",
+        "total_msg_count",
+        "total_msg_count_root",
+        "type",
+        "update_at"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/channels/{id}",
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "request_fields": [],
+      "response_root": "object",
+      "response_fields": [
+        "autotranslation",
+        "banner_info",
+        "create_at",
+        "creator_id",
+        "default_category_name",
+        "delete_at",
+        "disable_join_leave_messages",
+        "discoverable",
+        "display_name",
+        "extra_update_at",
+        "group_constrained",
+        "header",
+        "id",
+        "last_post_at",
+        "last_root_post_at",
+        "managed_category_name",
+        "name",
+        "policy_auto_add",
+        "policy_enforced",
+        "policy_id",
+        "policy_is_active",
+        "props",
+        "purpose",
+        "scheme_id",
+        "shared",
+        "team_id",
+        "total_msg_count",
+        "total_msg_count_root",
+        "type",
+        "update_at"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v4/posts",
+      "times_seen": 6,
+      "statuses": [
+        201
+      ],
+      "request_fields": [
+        "channel_id",
+        "create_at",
+        "file_ids",
+        "message",
+        "metadata",
+        "pending_post_id",
+        "props",
+        "reply_count",
+        "root_id",
+        "update_at",
+        "user_id"
+      ],
+      "response_root": "object",
+      "response_fields": [
+        "channel_id",
+        "create_at",
+        "delete_at",
+        "edit_at",
+        "file_ids",
+        "hashtags",
+        "id",
+        "is_pinned",
+        "last_reply_at",
+        "message",
+        "metadata",
+        "original_id",
+        "participants",
+        "pending_post_id",
+        "props",
+        "remote_id",
+        "reply_count",
+        "root_id",
+        "type",
+        "update_at",
+        "user_id"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v4/channels/{id}/posts",
+      "times_seen": 2,
+      "statuses": [
+        200
+      ],
+      "request_fields": [],
+      "response_root": "object",
+      "response_fields": [
+        "first_inaccessible_post_time",
+        "next_post_id",
+        "order",
+        "posts",
+        "prev_post_id"
+      ]
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v4/posts/{id}/patch",
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "request_fields": [
+        "channelId",
+        "channel_id",
+        "createAt",
+        "create_at",
+        "delete_at",
+        "edit_at",
+        "fileInfos",
+        "file_ids",
+        "hashtags",
+        "id",
+        "is_pinned",
+        "last_reply_at",
+        "message",
+        "metadata",
+        "original_id",
+        "participants",
+        "pending_post_id",
+        "props",
+        "remote_id",
+        "reply_count",
+        "rootId",
+        "root_id",
+        "type",
+        "updateAt",
+        "update_at",
+        "uploadsInProgress",
+        "user_id"
+      ],
+      "response_root": "object",
+      "response_fields": [
+        "channel_id",
+        "create_at",
+        "delete_at",
+        "edit_at",
+        "file_ids",
+        "hashtags",
+        "id",
+        "is_pinned",
+        "last_reply_at",
+        "message",
+        "metadata",
+        "original_id",
+        "participants",
+        "pending_post_id",
+        "props",
+        "reply_count",
+        "root_id",
+        "type",
+        "update_at",
+        "user_id"
+      ]
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v4/posts/{id}",
+      "times_seen": 1,
+      "statuses": [
+        200
+      ],
+      "request_fields": [],
+      "response_root": "object",
+      "response_fields": [
+        "status"
+      ]
+    }
+  ]
+}
